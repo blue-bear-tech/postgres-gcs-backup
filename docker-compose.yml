@@ -1,4 +1,4 @@
-version: '3.8'
+version: "3.8"
 
 services:
   postgres.gcs_backup:
@@ -10,4 +10,4 @@ services:
       POSTGRES_PORT: 5432
       POSTGRES_USER: "postgres"
       POSTGRES_PASSWORD: "postgres"
-
+      GCS_BACKUP_BUCKET: "backup"
