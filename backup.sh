@@ -47,17 +47,18 @@ if [ "${GCS_BACKUP_BUCKET}" = "**None**" ]; then
 fi
 
 # Postgres dumping
-DATE=`date +"%Y-%m-%d_%H-%M-%S"`
-FILENAME="${DATE}.sql.gz"
+FILENAME="${GCS_BACKUP_NAME:-backup}.sql.gz"
+# Print the file name
+echo "Backup file name $file_name"
 export PGPASSWORD=$POSTGRES_PASSWORD
 POSTGRES_HOST_OPTS="-h $POSTGRES_HOST -p $POSTGRES_PORT -U $POSTGRES_USER $POSTGRES_EXTRA_OPTS"
 
 echo "Creating dump of ${POSTGRES_DATABASE} database from ${POSTGRES_HOST}..."
-pg_dump $POSTGRES_HOST_OPTS $POSTGRES_DATABASE | gzip > $FILENAME
+pg_dump $POSTGRES_HOST_OPTS $POSTGRES_DATABASE | gzip >$FILENAME
 
 # Google Cloud Auth
 echo "Authenticating to Google Cloud..."
-echo $GCLOUD_KEYFILE_BASE64 | base64 -d > /key.json
+echo $GCLOUD_KEYFILE_BASE64 | base64 -d >/key.json
 gcloud auth activate-service-account --key-file /key.json --project "$GCLOUD_PROJECT_ID" -q
 
 # Upload to GCS
