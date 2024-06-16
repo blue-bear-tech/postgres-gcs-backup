@@ -47,7 +47,8 @@ if [ "${GCS_BACKUP_BUCKET}" = "**None**" ]; then
 fi
 
 # Postgres dumping
-FILENAME="${GCS_BACKUP_NAME}.sql.gz"
+DATE=$(date +"%Y-%m-%d_%H-%M-%S")
+FILENAME="${GCS_BACKUP_NAME:-backup}-${DATE}.sql.gz"
 # Print the file name
 echo "Backup file name $file_name"
 export PGPASSWORD=$POSTGRES_PASSWORD
